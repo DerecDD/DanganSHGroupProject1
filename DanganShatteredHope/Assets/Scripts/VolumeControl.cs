@@ -4,6 +4,7 @@ using System.IO;
 
 public class VolumeControl : MonoBehaviour
 {
+    public string uniqueAudioSourceName; // Unique name for the audio source
     public AudioSource audioSource; // Assign the AudioSource component for background audio
     public Image[] volumeImages; // Assign 10 image objects in order
     public Color activeColor = Color.white; // Color for active volume level
@@ -19,7 +20,7 @@ public class VolumeControl : MonoBehaviour
 
     void Start()
     {
-        saveFilePath = Application.persistentDataPath + "/VolumeData.txt";
+        saveFilePath = Application.persistentDataPath + "/" + uniqueAudioSourceName + "_VolumeData.txt";
 
         LoadVolume();
         UpdateVolumeIndicators();
@@ -36,8 +37,6 @@ public class VolumeControl : MonoBehaviour
         {
             AttemptChangeVolume(-volumeStep);
         }
-
-        UpdateVolumeIndicators();
     }
 
     void AttemptChangeVolume(float change)
@@ -57,6 +56,8 @@ public class VolumeControl : MonoBehaviour
             ChangeVolume(newVolume - audioSource.volume);
             PlayIntervalSound();
         }
+
+        UpdateVolumeIndicators(); // Update the visuals in real-time
     }
 
     void ChangeVolume(float change)

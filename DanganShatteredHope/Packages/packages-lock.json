@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "com.coffee.softmask-for-ugui": {
-      "version": "file:C:/Users/Dereck/Downloads/SoftMaskForUGUI-3.3.0/SoftMaskForUGUI-3.3.0/Packages/src",
+      "version": "file:src",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       }
