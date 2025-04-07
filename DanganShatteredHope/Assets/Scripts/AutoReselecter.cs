@@ -28,6 +28,8 @@ public class AutoReselecter : MonoBehaviour
         }
 
         HandleScrollInput();
+        HandleKeyboardInput(); // Check for keyboard input
+        HandleSubmitInput(); // Check for Enter or Space input
         HandleLeftClick(); // Check for left click input
     }
 
@@ -43,6 +45,34 @@ public class AutoReselecter : MonoBehaviour
         {
             currentIndex = (currentIndex + 1) % buttons.Count;
             eventSystem.SetSelectedGameObject(buttons[currentIndex]);
+        }
+    }
+
+    private void HandleKeyboardInput()
+    {
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) // Navigate up
+        {
+            currentIndex = (currentIndex - 1 + buttons.Count) % buttons.Count;
+            eventSystem.SetSelectedGameObject(buttons[currentIndex]);
+        }
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) // Navigate down
+        {
+            currentIndex = (currentIndex + 1) % buttons.Count;
+            eventSystem.SetSelectedGameObject(buttons[currentIndex]);
+        }
+    }
+
+    private void HandleSubmitInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space)) // Enter or Space pressed
+        {
+            if (eventSystem.currentSelectedGameObject != null)
+            {
+                // Simulate a button press on the currently selected button
+                ExecuteEvents.Execute(eventSystem.currentSelectedGameObject,
+                                      new PointerEventData(eventSystem),
+                                      ExecuteEvents.submitHandler);
+            }
         }
     }
 
