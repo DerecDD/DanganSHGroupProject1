@@ -18,7 +18,7 @@ public class DialogueController : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip advanceSound;
     public GameObject autoModeIndicator;
-    public GameObject manualModeIndicator;
+    public GameObject manualModeIndicator; // Used as the "next" indicator
     public float autoModeDelay = 0.5f;
     public float manualModeDelay = 0.5f;
     public float typewriterSpeed = 0.05f;
@@ -26,6 +26,7 @@ public class DialogueController : MonoBehaviour
     private int currentIndex = 0;
     private bool isAutoMode = false;
     private bool isSkipping = false;
+    private bool isTyping = false;
     private Coroutine typingCoroutine;
 
     void Start()
@@ -39,7 +40,14 @@ public class DialogueController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                AdvanceDialogue();
+                if (isTyping)
+                {
+                    CompleteTextImmediately();
+                }
+                else
+                {
+                    AdvanceDialogue();
+                }
             }
 
             if (Input.GetKey(KeyCode.Escape))
@@ -64,34 +72,49 @@ public class DialogueController : MonoBehaviour
 
         var element = dialogueElements[currentIndex];
 
-        if (audioSource && advanceSound)
+        // Ensure clicking first completes the text
+        if (isTyping)
         {
-            audioSource.PlayOneShot(advanceSound);
+            CompleteTextImmediately();
+            return;
         }
 
-        if (element.textMeshPro)
-        {
-            if (typingCoroutine != null)
-            {
-                StopCoroutine(typingCoroutine);
-            }
-            typingCoroutine = StartCoroutine(TypeText(element.textMeshPro, element.text));
-        }
-
-        if (element.audioClip && audioSource)
-        {
-            audioSource.PlayOneShot(element.audioClip);
-        }
-
-        element.action?.Invoke();
-
+        // Now it's safe to advance the dialogue
         currentIndex++;
+
+        if (currentIndex < dialogueElements.Count)
+        {
+            element = dialogueElements[currentIndex];
+
+            if (audioSource && advanceSound)
+            {
+                audioSource.PlayOneShot(advanceSound);
+            }
+
+            if (element.textMeshPro)
+            {
+                if (typingCoroutine != null)
+                {
+                    StopCoroutine(typingCoroutine);
+                }
+                typingCoroutine = StartCoroutine(TypeText(element.textMeshPro, element.text));
+            }
+
+            if (element.audioClip && audioSource)
+            {
+                audioSource.PlayOneShot(element.audioClip);
+            }
+
+            element.action?.Invoke();
+        }
     }
+
 
     private IEnumerator TypeText(TextMeshProUGUI textMeshPro, string text)
     {
         textMeshPro.text = "";
-        manualModeIndicator?.SetActive(false); // Hide the manual mode indicator during typing
+        manualModeIndicator?.SetActive(false); // Hide indicator while typing
+        isTyping = true;
 
         foreach (char c in text.ToCharArray())
         {
@@ -99,11 +122,36 @@ public class DialogueController : MonoBehaviour
             yield return new WaitForSeconds(typewriterSpeed);
         }
 
-        // Enable manual mode indicator after typewriter effect and its own delay
+        isTyping = false;
+
         if (!isAutoMode && manualModeIndicator != null)
         {
             yield return new WaitForSeconds(manualModeDelay);
-            manualModeIndicator.SetActive(true);
+            manualModeIndicator.SetActive(true); // Show when ready to advance
+        }
+    }
+
+    private void CompleteTextImmediately()
+    {
+        if (currentIndex >= dialogueElements.Count) return;
+
+        var element = dialogueElements[currentIndex];
+
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+
+        if (element.textMeshPro)
+        {
+            element.textMeshPro.text = element.text; // Instantly show full text
+        }
+
+        isTyping = false;
+
+        if (manualModeIndicator)
+        {
+            manualModeIndicator.SetActive(true); // Show when ready to advance
         }
     }
 
@@ -132,7 +180,7 @@ public class DialogueController : MonoBehaviour
         while (isAutoMode && currentIndex < dialogueElements.Count)
         {
             AdvanceDialogue();
-            yield return new WaitForSeconds(autoModeDelay); // Separate delay for auto mode
+            yield return new WaitForSeconds(autoModeDelay);
         }
     }
 
@@ -155,7 +203,7 @@ public class DialogueController : MonoBehaviour
         while (isSkipping && currentIndex < dialogueElements.Count)
         {
             AdvanceDialogue();
-            yield return new WaitForSeconds(0.1f); // Adjust skipping speed
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -168,7 +216,7 @@ public class DialogueController : MonoBehaviour
 
         if (manualModeIndicator)
         {
-            manualModeIndicator.SetActive(!isAutoMode);
+            manualModeIndicator.SetActive(false); // Hide on start
         }
     }
 }
