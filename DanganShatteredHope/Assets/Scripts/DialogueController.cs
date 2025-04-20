@@ -18,7 +18,7 @@ public class DialogueController : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip advanceSound;
     public GameObject autoModeIndicator;
-    public GameObject manualModeIndicator; // Used as the "next" indicator
+    public GameObject manualModeIndicator;
     public float autoModeDelay = 0.5f;
     public float manualModeDelay = 0.5f;
     public float typewriterSpeed = 0.05f;
@@ -32,6 +32,7 @@ public class DialogueController : MonoBehaviour
     void Start()
     {
         UpdateUI();
+        PlayDialogue(currentIndex);
     }
 
     void Update()
@@ -66,57 +67,50 @@ public class DialogueController : MonoBehaviour
         }
     }
 
-    private void AdvanceDialogue()
+    private void PlayDialogue(int index)
     {
-        if (currentIndex >= dialogueElements.Count) return;
+        if (index >= dialogueElements.Count) return;
 
-        var element = dialogueElements[currentIndex];
+        var element = dialogueElements[index];
 
-        // Ensure clicking first completes the text
-        if (isTyping)
+        if (element.textMeshPro)
         {
-            CompleteTextImmediately();
-            return;
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+            }
+            typingCoroutine = StartCoroutine(TypeText(element.textMeshPro, element.text));
         }
 
-        // Now it's safe to advance the dialogue
-        currentIndex++;
-
-        if (currentIndex < dialogueElements.Count)
+        if (element.audioClip && audioSource)
         {
-            element = dialogueElements[currentIndex];
-
-            if (audioSource && advanceSound)
-            {
-                audioSource.PlayOneShot(advanceSound);
-            }
-
-            if (element.textMeshPro)
-            {
-                if (typingCoroutine != null)
-                {
-                    StopCoroutine(typingCoroutine);
-                }
-                typingCoroutine = StartCoroutine(TypeText(element.textMeshPro, element.text));
-            }
-
-            if (element.audioClip && audioSource)
-            {
-                audioSource.PlayOneShot(element.audioClip);
-            }
-
-            element.action?.Invoke();
+            audioSource.PlayOneShot(element.audioClip);
         }
+
+        element.action?.Invoke();
     }
 
+    private void AdvanceDialogue()
+    {
+        if (currentIndex + 1 >= dialogueElements.Count) return;
+
+        currentIndex++;
+
+        if (audioSource && advanceSound)
+        {
+            audioSource.PlayOneShot(advanceSound);
+        }
+
+        PlayDialogue(currentIndex);
+    }
 
     private IEnumerator TypeText(TextMeshProUGUI textMeshPro, string text)
     {
         textMeshPro.text = "";
-        manualModeIndicator?.SetActive(false); // Hide indicator while typing
+        manualModeIndicator?.SetActive(false);
         isTyping = true;
 
-        foreach (char c in text.ToCharArray())
+        foreach (char c in text)
         {
             textMeshPro.text += c;
             yield return new WaitForSeconds(typewriterSpeed);
@@ -127,7 +121,7 @@ public class DialogueController : MonoBehaviour
         if (!isAutoMode && manualModeIndicator != null)
         {
             yield return new WaitForSeconds(manualModeDelay);
-            manualModeIndicator.SetActive(true); // Show when ready to advance
+            manualModeIndicator.SetActive(true);
         }
     }
 
@@ -144,14 +138,14 @@ public class DialogueController : MonoBehaviour
 
         if (element.textMeshPro)
         {
-            element.textMeshPro.text = element.text; // Instantly show full text
+            element.textMeshPro.text = element.text;
         }
 
         isTyping = false;
 
         if (manualModeIndicator)
         {
-            manualModeIndicator.SetActive(true); // Show when ready to advance
+            manualModeIndicator.SetActive(true);
         }
     }
 
@@ -159,15 +153,8 @@ public class DialogueController : MonoBehaviour
     {
         isAutoMode = !isAutoMode;
 
-        if (autoModeIndicator)
-        {
-            autoModeIndicator.SetActive(isAutoMode);
-        }
-
-        if (manualModeIndicator)
-        {
-            manualModeIndicator.SetActive(!isAutoMode);
-        }
+        autoModeIndicator?.SetActive(isAutoMode);
+        manualModeIndicator?.SetActive(!isAutoMode);
 
         if (isAutoMode)
         {
@@ -209,14 +196,7 @@ public class DialogueController : MonoBehaviour
 
     private void UpdateUI()
     {
-        if (autoModeIndicator)
-        {
-            autoModeIndicator.SetActive(isAutoMode);
-        }
-
-        if (manualModeIndicator)
-        {
-            manualModeIndicator.SetActive(false); // Hide on start
-        }
+        autoModeIndicator?.SetActive(isAutoMode);
+        manualModeIndicator?.SetActive(false);
     }
 }
