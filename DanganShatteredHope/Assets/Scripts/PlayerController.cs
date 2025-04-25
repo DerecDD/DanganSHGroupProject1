@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
 
     bool isPlayingFootstepSound = false; // To manage sound playback timing
 
+    
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -50,6 +51,12 @@ public class PlayerController : MonoBehaviour
 
         // Store the default Y position of the camera
         defaultCameraYPos = playerCamera.localPosition.y;
+    }
+
+    void OnEnable()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update()
