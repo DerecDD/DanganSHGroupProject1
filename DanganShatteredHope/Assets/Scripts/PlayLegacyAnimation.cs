@@ -24,8 +24,12 @@ public class PlayLegacyAnimation : MonoBehaviour
             return;
         }
 
-        legacyAnimation.Play(animationName);
-        Debug.Log($"Playing animation: {animationName}");
+        // Ensure the animation overrides any currently playing animation
+        legacyAnimation.Stop(); // Stop all animations currently running
+        legacyAnimation[animationName].time = 0f; // Reset animation playback time
+        legacyAnimation.Play(animationName); // Play the new animation
+
+        Debug.Log($"Forced animation override: {animationName}");
     }
 
     // Method to play all animations in sequence
@@ -51,9 +55,12 @@ public class PlayLegacyAnimation : MonoBehaviour
                 continue;
             }
 
+            // Ensure each animation plays immediately regardless of ongoing animations
+            legacyAnimation.Stop();
+            legacyAnimation[animationName].time = 0f;
             legacyAnimation.Play(animationName);
+
             Debug.Log($"Playing animation: {animationName}");
-            // Optionally, add delays or logic for sequential playback
         }
     }
 }

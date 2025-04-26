@@ -5,44 +5,30 @@ using UnityEngine;
 [System.Serializable]
 public class CustomActionElementSeperate
 {
-    public string actionName; // Name of the individual action
-    public UnityEngine.Events.UnityEvent action; // The action itself
+    public string actionName;
+    public UnityEngine.Events.UnityEvent action;
 }
 
 public class ActionWithDelaySeperate : MonoBehaviour
 {
-    public float delayBeforeActions = 0f; // Delay before executing actions
-    public List<CustomActionElementSeperate> actionElements = new List<CustomActionElementSeperate>(); // List of actions
+    public float delayBeforeActions = 1f;
+    public List<CustomActionElementSeperate> actionElements = new List<CustomActionElementSeperate>();
 
     public void ActivateActionWithDelay(string actionName)
     {
-        StartCoroutine(ExecuteActionWithDelay(actionName));
+        Debug.Log($"Scheduling '{actionName}' for execution in {delayBeforeActions} seconds.");
+        Invoke(nameof(InvokeAction), delayBeforeActions);
     }
 
-    private IEnumerator ExecuteActionWithDelay(string actionName)
+    private void InvokeAction()
     {
-        yield return new WaitForSeconds(delayBeforeActions);
+        Debug.Log("Delay completed. Executing action.");
 
         foreach (var element in actionElements)
         {
-            if (element.actionName == actionName)
-            {
-                element.action.Invoke(); // Execute the specific action
-                break;
-            }
-        }
-    }
-
-    // New method to toggle an action by name
-    public void ToggleActionByName(string actionName)
-    {
-        foreach (var element in actionElements)
-        {
-            if (element.actionName == actionName)
-            {
-                element.action.Invoke(); // Invoke the action directly
-                break;
-            }
+            element.action.Invoke();
+            Debug.Log($"Action '{element.actionName}' invoked.");
+            break;
         }
     }
 }
