@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.coffee.softmask-for-ugui": "file:C:/Users/Dereck/Downloads/SoftMaskForUGUI-3.3.0/SoftMaskForUGUI-3.3.0/Packages/src",
+    "com.limworks.urpssrpackage": "file:C:/Users/Dereck/Downloads/Unity-ScreenSpaceReflections-URP-main/Unity-ScreenSpaceReflections-URP-main",
     "com.unity.collab-proxy": "2.7.1",
     "com.unity.device-simulator.devices": "1.0.0",
     "com.unity.ide.rider": "3.0.31",

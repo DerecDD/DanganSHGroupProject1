@@ -8,6 +8,12 @@
         "com.unity.ugui": "1.0.0"
       }
     },
+    "com.limworks.urpssrpackage": {
+      "version": "file:C:/Users/Dereck/Downloads/Unity-ScreenSpaceReflections-URP-main/Unity-ScreenSpaceReflections-URP-main",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.burst": {
       "version": "1.8.17",
       "depth": 1,

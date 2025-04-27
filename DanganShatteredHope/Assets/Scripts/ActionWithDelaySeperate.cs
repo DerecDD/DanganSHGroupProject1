@@ -28,7 +28,7 @@ public class ActionWithDelaySeperate : MonoBehaviour
         {
             element.action.Invoke();
             Debug.Log($"Action '{element.actionName}' invoked.");
-            break;
         }
     }
+
 }
