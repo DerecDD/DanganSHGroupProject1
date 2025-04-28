@@ -14,6 +14,12 @@
       "source": "local",
       "dependencies": {}
     },
+    "com.llcheesell.led_screen_shader": {
+      "version": "file:C:/Users/Dereck/Downloads/LEDScreenShader-0.1.1/LEDScreenShader-0.1.1/Assets/LEDScreenShader",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.burst": {
       "version": "1.8.17",
       "depth": 1,

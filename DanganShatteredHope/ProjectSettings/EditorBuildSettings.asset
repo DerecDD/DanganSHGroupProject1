@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/World/World.unity
     guid: 4a3ff9e9eba5908409e3c5ff05127c42
+  - enabled: 1
+    path: Assets/Scenes/Levels/World/LoungeClassTrial1.unity
+    guid: e7a9d50d9f3051f4298f936189101987
   m_configObjects: {}
