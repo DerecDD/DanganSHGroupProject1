@@ -8,16 +8,16 @@
         "com.unity.ugui": "1.0.0"
       }
     },
-    "com.limworks.urpssrpackage": {
-      "version": "file:C:/Users/Dereck/Downloads/Unity-ScreenSpaceReflections-URP-main/Unity-ScreenSpaceReflections-URP-main",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {}
-    },
     "com.llcheesell.led_screen_shader": {
       "version": "file:C:/Users/Dereck/Downloads/LEDScreenShader-0.1.1/LEDScreenShader-0.1.1/Assets/LEDScreenShader",
       "depth": 0,
       "source": "local",
+      "dependencies": {}
+    },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
       "dependencies": {}
     },
     "com.unity.burst": {

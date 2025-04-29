@@ -83,13 +83,56 @@ public class PauseMenuFunction : MonoBehaviour
     {
         return obj.GetComponent<MonoBehaviour>() != null; // Ensures at least one script exists
     }
-}
 
-// **Helper Class to Manage Actions**
-[System.Serializable]
-public class ActionElement
-{
-    public string actionName; // Name for better organization
-    public UnityEvent action; // The UnityEvent action
-    public bool isEnabled = true; // Toggle for enabling/disabling this action
+    public void EnableByName(string actionName)
+    {
+        foreach (var actionElement in preEnableActions)
+        {
+            if (actionElement.actionName == actionName)
+            {
+                actionElement.isEnabled = true;
+                Debug.Log($"Action '{actionName}' enabled in pre-enable actions.");
+            }
+        }
+
+        foreach (var actionElement in preDisableActions)
+        {
+            if (actionElement.actionName == actionName)
+            {
+                actionElement.isEnabled = true;
+                Debug.Log($"Action '{actionName}' enabled in pre-disable actions.");
+            }
+        }
+    }
+
+    public void DisableByName(string actionName)
+    {
+        foreach (var actionElement in preEnableActions)
+        {
+            if (actionElement.actionName == actionName)
+            {
+                actionElement.isEnabled = false;
+                Debug.Log($"Action '{actionName}' disabled in pre-enable actions.");
+            }
+        }
+
+        foreach (var actionElement in preDisableActions)
+        {
+            if (actionElement.actionName == actionName)
+            {
+                actionElement.isEnabled = false;
+                Debug.Log($"Action '{actionName}' disabled in pre-disable actions.");
+            }
+        }
+    }
+
+
+    // **Helper Class to Manage Actions**
+    [System.Serializable]
+    public class ActionElement
+    {
+        public string actionName; // Name for better organization
+        public UnityEvent action; // The UnityEvent action
+        public bool isEnabled = true; // Toggle for enabling/disabling this action
+    }
 }
