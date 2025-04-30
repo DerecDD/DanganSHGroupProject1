@@ -91,8 +91,38 @@ MonoBehaviour:
     failOperation: 0
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
-  m_RenderingMode: 1
+  m_RenderingMode: 2
   m_DepthPrimingMode: 0
   m_CopyDepthMode: 2
   m_AccurateGbufferNormals: 1
   m_IntermediateTextureMode: 1
+--- !u!114 &760743209470725997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea6a304e88f1b3d4da2287a3bc0e72a7, type: 3}
+  m_Name: GrabScreenFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    TextureName: _GrabPassTransparent
+    LayerMask:
+      m_Bits: 4294967295
+--- !u!114 &8718978589696921961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a720b49d920bde49b1c2e3d84be216e, type: 3}
+  m_Name: GrabPassFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
