@@ -110,11 +110,19 @@ public class DialogueController : MonoBehaviour
         manualModeIndicator?.SetActive(false);
         isTyping = true;
 
-        foreach (char c in text)
+        int visibleCount = 0;
+        textMeshPro.maxVisibleCharacters = 0;
+        textMeshPro.text = text;
+
+        while (visibleCount <= text.Length) // <= instead of <
         {
-            textMeshPro.text += c;
+            textMeshPro.maxVisibleCharacters = Mathf.Min(visibleCount, text.Length); // Prevent overshooting
+            visibleCount++;
             yield return new WaitForSeconds(typewriterSpeed);
         }
+
+        // Ensure full text is revealed
+        textMeshPro.maxVisibleCharacters = text.Length;
 
         isTyping = false;
 
@@ -124,6 +132,8 @@ public class DialogueController : MonoBehaviour
             manualModeIndicator.SetActive(true);
         }
     }
+
+
 
     private void CompleteTextImmediately()
     {
@@ -138,7 +148,7 @@ public class DialogueController : MonoBehaviour
 
         if (element.textMeshPro)
         {
-            element.textMeshPro.text = element.text;
+            element.textMeshPro.maxVisibleCharacters = element.text.Length; // Instantly reveal full text
         }
 
         isTyping = false;
@@ -148,6 +158,7 @@ public class DialogueController : MonoBehaviour
             manualModeIndicator.SetActive(true);
         }
     }
+
 
     private void ToggleAutoMode()
     {
