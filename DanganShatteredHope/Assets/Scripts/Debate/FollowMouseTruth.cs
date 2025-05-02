@@ -2,20 +2,39 @@ using UnityEngine;
 
 public class FollowMouseTruth : MonoBehaviour
 {
-    void Update()
+    public Canvas canvas;
+    public float planeDistance = 10f;
+    public float anchorAngle = 0f; // Adjusts initial rotation
+    public Vector3 positionOffset = Vector3.zero; // Allows tweaking the position offset
+
+    private void Update()
     {
-        // Get mouse position in world space
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = Camera.main.transform.position.z; // Adjust for camera depth
-        Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
+        Vector3 mouseWorldPosition = GetMouseWorldPosition() + positionOffset;
+        Vector3 direction = (mouseWorldPosition - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+        transform.rotation = targetRotation * Quaternion.Euler(0, anchorAngle, 0);
+    }
 
-        // Compute direction from object to mouse
-        Vector3 direction = worldMousePos - transform.position;
+    private Vector3 GetMouseWorldPosition()
+    {
+        Vector3 mousePosition = Input.mousePosition;
 
-        // Compute rotation towards mouse position
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+        {
+            RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+            Vector2 localPoint;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, mousePosition, canvas.worldCamera, out localPoint);
+            Vector3 worldPosition = canvasRect.TransformPoint(localPoint);
 
-        // Apply rotation to object
-        transform.rotation = Quaternion.Euler(new Vector3(0, 83, angle));
+            // Ensure correct depth in UI space
+            worldPosition.z = canvas.worldCamera ? canvas.worldCamera.transform.position.z + planeDistance : planeDistance;
+            return worldPosition;
+        }
+        else
+        {
+            // Convert screen to world coordinates correctly
+            mousePosition.z = planeDistance;
+            return Camera.main.ScreenToWorldPoint(mousePosition);
+        }
     }
 }
