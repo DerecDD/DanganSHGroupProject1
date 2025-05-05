@@ -114,10 +114,7 @@ public class DialogueControllerTest : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ToggleAutoMode();
-        }
+        
     }
 
 

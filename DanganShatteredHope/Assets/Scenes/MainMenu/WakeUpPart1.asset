@@ -441,8 +441,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   anamorphicFlaresIntensity:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 2
   anamorphicFlaresThreshold:
     m_OverrideState: 0
     m_Value: 0.75
@@ -612,10 +612,10 @@ MonoBehaviour:
     m_Value: 3
   chromaticAberrationIntensity:
     m_OverrideState: 1
-    m_Value: 0.0322
+    m_Value: 0.05
   chromaticAberrationShift:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: -0.09
   chromaticAberrationSmoothing:
     m_OverrideState: 0
     m_Value: 0
